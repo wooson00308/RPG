@@ -99,15 +99,15 @@
   - `Idle`: 기본 대기 상태.
   - `Chase`: 플레이어를 추적하는 상태.
   - `Attack`: 공격 상태 (패턴 선택).
-  - `Special`: 특수 패턴 상태 (중간 보스 이상).
+  - `Pattern 1 ~ 4`: 특수 패턴 상태 (중간 보스 이상).
   - `Die`: 사망 상태.
 - **상태 전이 조건**:
   - `Idle` → `Chase`: 플레이어가 탐지 범위 내에 있을 때.
   - `Chase` → `Attack`: 플레이어가 공격 범위 내에 있을 때.
-  - `Attack` → `Chase`: 공격이 끝난 후 플레이어가 여전히 범위 내에 있을 때.
-  - `Attack` → `Special`: 체력이 특정 비율 이하로 떨어졌을 때 (중간 보스 이상).
+  - `Attack` → `Pattern`: 공격에서 상황에 맞게 패턴 선택 합니다.
+  - `Pattern` → `Attack`: 패턴이 끝난 후, 상황을 판단하고 패턴을 다시 진행할지 여부를 판단.
+  - `Attack` → `Chase`: 각 패턴들의 조건에 모두 부합하지 않을 경우 추격 상태로 전환.
   - `Any State` → `Die`: 체력이 0 이하로 떨어졌을 때.
 - **파라미터**:
   - `EnemyGrade`: 적 등급 (1=Normal, 2=Epic, 3=MidBoss, 4=DungeonBoss).
-  - `AttackPattern`: 선택된 공격 패턴 (0~4, 등급에 따라 결정).
-  - `HealthPercent`: 체력 비율 (0~1, 다단계 전투용).
+  - `AttackPattern`: 선택된 공격 패턴 (1~4, 등급에 따라 결정).
