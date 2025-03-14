@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(StateHubSingleton))]
 public class GameState : State
 {
     [SerializeField]

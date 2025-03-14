@@ -1,23 +1,24 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[RequireComponent(typeof(StateHub))]
 public abstract class State : MonoBehaviour
 {
-    public IStateHub Hub { get; protected set; }
-    public bool IsProcessing { get; protected set; }
+    public StateHub Hub { get; protected set; }
+    public bool IsRunning { get; protected set; }
 
     public virtual void OnEnter()
     {
-        IsProcessing = true;
+        IsRunning = true;
     }
 
     public virtual void OnUpdate() { } 
     public virtual void OnExit()
     {
-        IsProcessing = false;
+        IsRunning = false;
     } 
 
-    public virtual void Initialzed(IStateHub hub)
+    public virtual void Initialzed(StateHub hub)
     {
         Hub = hub;
     }

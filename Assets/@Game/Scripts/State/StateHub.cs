@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StateHub : MonoBehaviour, IStateHub
+public class StateHub : MonoBehaviour
 {
     private State _curState;
 
@@ -12,16 +12,16 @@ public class StateHub : MonoBehaviour, IStateHub
     {
         _states = gameObject.GetComponentsInChildren<State>().ToList();
 
-        foreach (var process in _states)
+        foreach (var state in _states)
         {
-            process.Initialzed(this);
+            state.Initialzed(this);
         }
 
         _curState = _states.First();
         _curState.OnEnter();
     }
 
-    public void Update()
+    protected virtual void Update()
     {
         _curState?.OnUpdate();
     }
@@ -31,7 +31,7 @@ public class StateHub : MonoBehaviour, IStateHub
         var state = _states.Find(x => x is T);
         if (state == null)
         {
-            Debug.LogError($"{typeof(T)} not found");
+            Logger.LogWarning($"{typeof(T)} not found");
             return;
         }
 
