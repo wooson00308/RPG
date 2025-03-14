@@ -74,8 +74,6 @@
   - `Skill 1 ~ 3`: 스킬 모션 상태 (스킬 모션 선택).
   - `Hit`: 피격 상태.
   - `Death`: 사망 상태.
-- **파라미터**:
-  - `SkillMotion`: 선택된 스킬 모션
 
 ## 적 시스템
 
@@ -95,6 +93,3 @@
   - `Pattern 1 ~ 4`: 특수 패턴 상태 (중간 보스 이상).
   - `Hit`: 피격 상태.
   - `Death`: 사망 상태.
-- **파라미터**:
-  - `EnemyGrade`: 적 등급 (1=Normal, 2=Epic, 3=MidBoss, 4=DungeonBoss).
-  - `AttackPattern`: 선택된 공격 패턴 (1~4, 등급에 따라 결정).
