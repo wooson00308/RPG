@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ca599f28c475034bb68b1d0666c6220, type: 3}
+  m_Name: CharacterData
+  m_EditorClassIdentifier: 
+  id: 0
+  moveSpeed: 0
+  attackRange: 0
+  baseHealth: 0
+  healthPerLevel: 0
+  baseHealthRegen: 0
+  healthRegenPerLevel: 0
+  baseArmor: 0
+  armorPerLevel: 0
+  baseMagicResist: 0
+  magicResistPerLevel: 0
+  tenacity: 0
+  baseAttackDamage: 0
+  attackDamagePerLevel: 0
+  baseAttackSpeed: 0
+  attackSpeedPerLevel: 0
+  baseAbilityPower: 0
+  abilityPowerPerLevel: 0
+  critChance: 0
+  critDamage: 1.75
+  armorPenetration: 0
+  magicPenetration: 0
+  lifeSteal: 0
+  physicalVamp: 0
+  omniVamp: 0
+  baseMana: 0
+  manaPerLevel: 0
+  baseManaRegen: 0
+  manaRegenPerLevel: 0
+  abilityHaste: 0

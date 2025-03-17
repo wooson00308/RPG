@@ -1,10 +1,9 @@
-using UnityEditor.Animations;
 public class IdleAIState : AIState
 {
     public override void OnEnter()
     {
         base.OnEnter();
-        Hub.Character.model?.CrossFade("Idle", 0f);
+        Hub.Character.Model.CrossFade("Idle", 0f);
         Hub.Character.Stop();
     }
 
@@ -12,9 +11,16 @@ public class IdleAIState : AIState
     {
         if (!CanState()) return;
 
-        if (Hub.TargetDistance <= Hub.config.chaseDistance)
+        if (Hub.TargetDistance <= Hub.config.attackDistance)
+        {
+            Hub.NextState<AttackAIState>();
+            return;
+        }
+
+        if (!Hub.Character.Stats.IsRooted && Hub.TargetDistance <= Hub.config.chaseDistance)
         {
             Hub.NextState<ChaseAIState>();
+            return;
         }
     }
 }

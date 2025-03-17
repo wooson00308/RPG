@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StateHub : MonoBehaviour
 {
+    private State _prevState;
     private State _curState;
 
     private List<State> _states = new();
@@ -43,6 +44,17 @@ public class StateHub : MonoBehaviour
         _curState?.OnExit();
         state.OnEnter();
 
+        _prevState = _curState;
         _curState = state;
+    }
+
+    public void PrevState()
+    {
+        if (_prevState == null)
+        {
+            return;
+        }
+
+        NextState(_prevState);
     }
 }
