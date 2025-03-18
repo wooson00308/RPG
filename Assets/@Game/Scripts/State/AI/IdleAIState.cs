@@ -11,7 +11,7 @@ public class IdleAIState : AIState
     {
         if (!CanState()) return;
 
-        if (Hub.TargetDistance <= Hub.config.attackDistance)
+        if (Hub.TargetDistance <= Hub.Character.Stats.AttackRange)
         {
             Hub.NextState<AttackAIState>();
             return;
