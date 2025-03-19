@@ -29,6 +29,9 @@ public class Character : MonoBehaviour
 
     private float _originalSpeed;
 
+    private bool _isDeath;
+    public bool IsDeath => _isDeath;
+
     private void Awake()
     {
         _stats = GetComponent<CharacterStats>();
@@ -46,11 +49,16 @@ public class Character : MonoBehaviour
         _data = data;
         _team = team;
 
-        _stats.Initialized(_data);
+        _stats.Initialized(this, _data);
+
+        _agent.enabled = true;
 
         _agent.speed = _stats.MoveSpeed / 100f;
         _originalSpeed = _agent.speed; // 초기 속도 저장
 
+        _hub.NextState<IdleAIState>();
+
+        _isDeath = false;
         _isInitialized = true;
     }
 
@@ -59,9 +67,10 @@ public class Character : MonoBehaviour
         _agent.isStopped = false;
         _agent.speed = _stats.MoveSpeed / 100f;
 
-        Vector3 direction = new Vector3(moveVector.x, 0, moveVector.y).normalized;
-        Vector3 destination = transform.position + direction * _agent.speed * Time.deltaTime;
+        Vector3 destination = transform.position + (Vector3)moveVector * _agent.speed * GameTime.DeltaTime;
         _agent.SetDestination(destination);
+
+        _model.UpdateMoveSpeed(_agent.speed);
 
         Rotate(moveVector);
     }
@@ -163,14 +172,34 @@ public class Character : MonoBehaviour
         Debug.Log($"Dash 완료: 위치 {transform.position}");
     }
 
-    private void OnEnable()
+    public void OnHit()
+    {
+        if (_isDeath) return;
+
+        _hub.NextState<HitAIState>();
+    }
+
+    public void OnDeath()
+    {
+        if (_isDeath) return;
+        _isDeath = true;
+
+        _agent.enabled = false;
+
+        _hub.NextState<DeathAIState>();
+    }
+
+    private void OnDisable()
     {
         _isInitialized = false;
     }
 
     private void Update()
     {
+        if (!_isInitialized) return;
         _agent.speed = _stats.MoveSpeed / 100f;
+
+        target = _factory.FindNearestEnemyOfTeam(_team);
     }
 }
 

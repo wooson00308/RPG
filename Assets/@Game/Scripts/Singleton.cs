@@ -1,15 +1,16 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 /// <summary>
-/// ÃÖ¼ÒÇÑÀÇ ±â´É¸¸ Æ÷ÇÔÇÑ Á¦³×¸¯ Singleton MonoBehaviour
+/// ìµœì†Œí•œì˜ ê¸°ëŠ¥ë§Œ í¬í•¨í•œ ì œë„¤ë¦­ Singleton MonoBehaviour
 /// </summary>
-/// <typeparam name="T">MonoBehaviour¸¦ »ó¼Ó¹Ş´Â Å¸ÀÔ</typeparam>
-public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+/// <typeparam name="T">MonoBehaviourë¥¼ ìƒì†ë°›ëŠ” íƒ€ì…</typeparam>
+public class Singleton<T> : SerializedMonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
 
     /// <summary>
-    /// ½Ì±ÛÅæ ÀÎ½ºÅÏ½º ÇÁ·ÎÆÛÆ¼
+    /// ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤ í”„ë¡œí¼í‹°
     /// </summary>
     public static T Instance
     {
@@ -20,7 +21,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 _instance = FindFirstObjectByType<T>();
                 if (_instance == null)
                 {
-                    Logger.LogError($"[Singleton] '{typeof(T)}' Å¸ÀÔÀÇ ÀÎ½ºÅÏ½º¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+                    Logger.LogError($"[Singleton] '{typeof(T)}' íƒ€ì…ì˜ ì¸ìŠ¤í„´ìŠ¤ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
                 }
             }
             return _instance;
@@ -36,7 +37,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
         else if (_instance != this)
         {
-            Logger.LogWarning($"[Singleton] '{typeof(T)}'ÀÇ ´Ù¸¥ ÀÎ½ºÅÏ½º°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. ÇöÀç ÀÎ½ºÅÏ½º¸¦ ÆÄ±«ÇÕ´Ï´Ù.");
+            Logger.LogWarning($"[Singleton] '{typeof(T)}'ì˜ ë‹¤ë¥¸ ì¸ìŠ¤í„´ìŠ¤ê°€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤. í˜„ì¬ ì¸ìŠ¤í„´ìŠ¤ë¥¼ íŒŒê´´í•©ë‹ˆë‹¤.");
             Destroy(gameObject);
         }
     }

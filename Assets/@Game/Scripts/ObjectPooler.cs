@@ -1,32 +1,32 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ObjectPooler : Singleton<ObjectPooler>
 {
-    // ¿ÀºêÁ§Æ® Ç®À» °ü¸®ÇÏ±â À§ÇÑ µñ¼Å³Ê¸®
-    private readonly Dictionary<string, Queue<GameObject>> _objectPool = new();
+    // ì˜¤ë¸Œì íŠ¸ í’€ì„ ê´€ë¦¬í•˜ê¸° ìœ„í•œ ë”•ì…”ë„ˆë¦¬
+
+    public Dictionary<int, Queue<GameObject>> _objectPool = new();
 
     /// <summary>
-    /// ÇÁ¸®ÆÕÀ» Ç®¸µÇØ¼­ ¿ÀºêÁ§Æ®¸¦ ¹İÈ¯ÇÔ
+    /// í”„ë¦¬íŒ¹ì„ í’€ë§í•´ì„œ ì˜¤ë¸Œì íŠ¸ë¥¼ ë°˜í™˜í•¨
     /// </summary>
     /// <param name="prefab"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GameObject Spawn(GameObject prefab, Transform parent = null)
+    public GameObject Spawn(int key, GameObject prefab, Transform parent = null)
     {
-        string key = prefab.name;
-
-        // ¸¸¾à Ç®¿¡ ÇØ´ç Å°°¡ ¾ø´Ù¸é, »õ·Î »ı¼º
+        // ë§Œì•½ í’€ì— í•´ë‹¹ í‚¤ê°€ ì—†ë‹¤ë©´, ìƒˆë¡œ ìƒì„±
         if (!_objectPool.ContainsKey(key))
         {
             _objectPool[key] = new Queue<GameObject>();
         }
 
-        // Ç®¿¡ ¿ÀºêÁ§Æ®°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+        // í’€ì— ì˜¤ë¸Œì íŠ¸ê°€ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸
         if (_objectPool[key].Count > 0)
         {
-            // Å¥¿¡¼­ ¿ÀºêÁ§Æ®¸¦ °¡Á®¿È
+            // íì—ì„œ ì˜¤ë¸Œì íŠ¸ë¥¼ ê°€ì ¸ì˜´
             GameObject pooledObject = _objectPool[key].Dequeue();
 
             pooledObject.SetActive(true);
@@ -36,7 +36,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
         }
         else
         {
-            // Ç®¿¡ »ç¿ë °¡´ÉÇÑ ¿ÀºêÁ§Æ®°¡ ¾ø´Ù¸é »õ·Î »ı¼º
+            // í’€ì— ì‚¬ìš© ê°€ëŠ¥í•œ ì˜¤ë¸Œì íŠ¸ê°€ ì—†ë‹¤ë©´ ìƒˆë¡œ ìƒì„±
             GameObject newObject = Instantiate(prefab, parent);
             newObject.name = newObject.GetInstanceID().ToString();
             return newObject;
@@ -44,58 +44,58 @@ public class ObjectPooler : Singleton<ObjectPooler>
     }
 
     /// <summary>
-    /// °æ·Î¿¡¼­ ¸®¼Ò½º¸¦ ºÒ·¯¿Í¼­ Ç®¸µ½ÃÅ°°í ¿ÀºêÁ§Æ®¸¦ ¹İÈ¯ÇÔ
+    /// ê²½ë¡œì—ì„œ ë¦¬ì†ŒìŠ¤ë¥¼ ë¶ˆëŸ¬ì™€ì„œ í’€ë§ì‹œí‚¤ê³  ì˜¤ë¸Œì íŠ¸ë¥¼ ë°˜í™˜í•¨
     /// </summary>
     /// <param name="path"></param>
     /// <param name="parent"></param>
     /// <returns></returns>
-    public GameObject SpawnFromPath(string path, Transform parent = null)
+    public GameObject SpawnFromPath(int key, string path, Transform parent = null)
     {
-        // ¸®¼Ò½º¸¦ °æ·Î¿¡¼­ ·Îµå
+        // ë¦¬ì†ŒìŠ¤ë¥¼ ê²½ë¡œì—ì„œ ë¡œë“œ
         GameObject prefab = Resources.Load<GameObject>(path);
         if (prefab == null)
         {
-            Logger.LogError($"¸®¼Ò½º °æ·Î '{path}'¿¡¼­ ÇÁ¸®ÆÕÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Logger.LogError($"ë¦¬ì†ŒìŠ¤ ê²½ë¡œ '{path}'ì—ì„œ í”„ë¦¬íŒ¹ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return null;
         }
 
-        // ±âÁ¸ Spawn ¸Ş¼­µå¸¦ »ç¿ëÇØ ÇÁ¸®ÆÕÀ» Ç®¸µÇØ¼­ °¡Á®¿À±â
-        return Spawn(prefab, parent);
+        // ê¸°ì¡´ Spawn ë©”ì„œë“œë¥¼ ì‚¬ìš©í•´ í”„ë¦¬íŒ¹ì„ í’€ë§í•´ì„œ ê°€ì ¸ì˜¤ê¸°
+        return Spawn(key, prefab, parent);
     }
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ®¸¦ Ç® ¾È¿¡ ¹İÈ¯½ÃÅ´
+    /// ì˜¤ë¸Œì íŠ¸ë¥¼ í’€ ì•ˆì— ë°˜í™˜ì‹œí‚´
     /// </summary>
     /// <param name="obj"></param>
-    public void ReturnToPool(GameObject obj)
+    public void ReturnToPool(int key, GameObject obj)
     {
         if (!obj.activeInHierarchy)
         {
-            Logger.LogWarning("ÀÌ¹Ì Ç®¿¡ ¹İÈ¯µÈ ¿ÀºêÁ§Æ®ÀÔ´Ï´Ù.");
+            Logger.LogWarning("ì´ë¯¸ í’€ì— ë°˜í™˜ëœ ì˜¤ë¸Œì íŠ¸ì…ë‹ˆë‹¤.");
             return;
         }
 
         obj.SetActive(false);
-        obj.transform.SetParent(transform);  // Ç® °ü¸®¿ë ºÎ¸ğ·Î ¼³Á¤
+        obj.transform.SetParent(transform);  // í’€ ê´€ë¦¬ìš© ë¶€ëª¨ë¡œ ì„¤ì •
 
-        if (!_objectPool.ContainsKey(obj.name))
+        if (!_objectPool.ContainsKey(key))
         {
-            _objectPool[obj.name] = new Queue<GameObject>();
+            _objectPool[key] = new Queue<GameObject>();
         }
 
-        // Å¥¿¡ Ãß°¡
-        _objectPool[obj.name].Enqueue(obj);
+        // íì— ì¶”ê°€
+        _objectPool[key].Enqueue(obj);
     }
 
     /// <summary>
-    /// UI ¿ÀºêÁ§Æ®¸¦ Ç®¿¡ ¹İÈ¯½ÃÅ°°í, ÀÚ½Ä¿¡ »õ·Î¿î Canvas¸¦ »ı¼ºÇÑ µÚ ºÎ¸ğ·Î ÇÒ´çÇÔ
+    /// UI ì˜¤ë¸Œì íŠ¸ë¥¼ í’€ì— ë°˜í™˜ì‹œí‚¤ê³ , ìì‹ì— ìƒˆë¡œìš´ Canvasë¥¼ ìƒì„±í•œ ë’¤ ë¶€ëª¨ë¡œ í• ë‹¹í•¨
     /// </summary>
     /// <param name="uiObject"></param>
-    public void ReturnToPoolUI(GameObject uiObject)
+    public void ReturnToPoolUI(int key, GameObject uiObject)
     {
         if (!uiObject.activeInHierarchy)
         {
-            //Debug.LogWarning("ÀÌ¹Ì Ç®¿¡ ¹İÈ¯µÈ UI ¿ÀºêÁ§Æ®ÀÔ´Ï´Ù.");
+            //Debug.LogWarning("ì´ë¯¸ í’€ì— ë°˜í™˜ëœ UI ì˜¤ë¸Œì íŠ¸ì…ë‹ˆë‹¤.");
             return;
         }
 
@@ -109,38 +109,38 @@ public class ObjectPooler : Singleton<ObjectPooler>
             Canvas canvas = canvasObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-            var scaler = canvasObject.AddComponent<CanvasScaler>(); // UI ½ºÄÉÀÏ Á¶Àı
+            var scaler = canvasObject.AddComponent<CanvasScaler>(); // UI ìŠ¤ì¼€ì¼ ì¡°ì ˆ
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1080, 1920);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
-            canvasObject.AddComponent<GraphicRaycaster>(); // UI Å¬¸¯ ÀÌº¥Æ® Ã³¸®
+            canvasObject.AddComponent<GraphicRaycaster>(); // UI í´ë¦­ ì´ë²¤íŠ¸ ì²˜ë¦¬
 
             canvasObject.transform.SetParent(transform, false);
         }
         
-        // UI ºÎ¸ğ¸¦ ResourceManager·Î ¼³Á¤
+        // UI ë¶€ëª¨ë¥¼ ResourceManagerë¡œ ì„¤ì •
         uiObject.transform.SetParent(canvasObject.transform, false);
 
-        // UI ¿ÀºêÁ§Æ®¸¦ ºñÈ°¼ºÈ­ÇÏ°í Ç®¿¡ Ãß°¡
+        // UI ì˜¤ë¸Œì íŠ¸ë¥¼ ë¹„í™œì„±í™”í•˜ê³  í’€ì— ì¶”ê°€
         uiObject.SetActive(false);
 
-        if (!_objectPool.ContainsKey(uiObject.name))
+        if (!_objectPool.ContainsKey(key))
         {
-            _objectPool[uiObject.name] = new Queue<GameObject>();
+            _objectPool[key] = new Queue<GameObject>();
         }
 
-        _objectPool[uiObject.name].Enqueue(uiObject);
+        _objectPool[key].Enqueue(uiObject);
     }
 
 
-    public Queue<GameObject> GetPoolObjects(string key)
+    public Queue<GameObject> GetPoolObjects(int key)
     {
         return _objectPool[key];
     }
 
     /// <summary>
-    /// ¿ÀºêÁ§Æ® »óÅÂ ÃÊ±âÈ­
+    /// ì˜¤ë¸Œì íŠ¸ ìƒíƒœ ì´ˆê¸°í™”
     /// </summary>
     /// <param name="obj"></param>
     private void ResetObject(GameObject obj)

@@ -4,6 +4,7 @@ using System.Linq;
 
 public class CharacterStats : MonoBehaviour
 {
+    private Character _owner;
     private CharacterData _data;
     private int _currentLevel = 1;
 
@@ -47,8 +48,9 @@ public class CharacterStats : MonoBehaviour
                                                                 .DefaultIfEmpty(0f)
                                                                 .Max());
 
-    public void Initialized(CharacterData data)
+    public void Initialized(Character owner, CharacterData data)
     {
+        _owner = owner;
         _data = data;
         _statsDirty = true;
         UpdateAllStats();
@@ -116,6 +118,8 @@ public class CharacterStats : MonoBehaviour
         }
         return _statCache.ContainsKey(statType) ? _statCache[statType] : 0f;
     }
+
+
 
     private void UpdateAllStats()
     {
@@ -199,6 +203,16 @@ public class CharacterStats : MonoBehaviour
         }
 
         CurrentHealth = Mathf.Max(0, CurrentHealth - totalDamage);
+
+        if(CurrentHealth <= 0)
+        {
+            _owner.OnDeath();
+        }
+        else
+        {
+            _owner.OnHit();
+        }
+
         return totalDamage;
     }
 

@@ -26,7 +26,7 @@ public class AIStateHub : StateHub
         if(_character.target != null)
         {
             _targetDistance = Vector2.Distance(_character.transform.position, _character.target.transform.position);
-            _targetDirection = _character.transform.position - _character.target.transform.position;
+            _targetDirection = _character.target.transform.position - _character.transform.position;
         }
 
         base.Update();

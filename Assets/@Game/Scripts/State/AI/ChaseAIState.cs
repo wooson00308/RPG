@@ -3,25 +3,26 @@ public class ChaseAIState : AIState
     public override void OnEnter()
     {
         base.OnEnter();
-        Hub.Character.Model.CrossFade("Chase", 0f);
-        Hub.Character.Move(Hub.TargetDirection);
+        AIHub.Character.Model.CrossFade("Chase", 0f);
     }
 
     public override void OnUpdate()
     {
         if (!CanState()) return;
 
-        if (Hub.Character.Stats.IsRooted) 
+        if (AIHub.Character.Stats.IsRooted || AIHub.Character.target == null) 
         {
             Hub.NextState<IdleAIState>();
             return;
         }
 
-        if (Hub.TargetDistance <= Hub.config.attackDistance)
+        if (AIHub.TargetDistance <= AIHub.Character.Stats.AttackRange)
         {
-            Hub.NextState<AttackAIState>();
+            AIHub.NextState<AttackAIState>();
             return;
         }
+
+        AIHub.Character.Move(AIHub.TargetDirection);
     }
 
     protected override bool CanState()

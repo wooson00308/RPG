@@ -3,21 +3,23 @@ public class IdleAIState : AIState
     public override void OnEnter()
     {
         base.OnEnter();
-        Hub.Character.Model.CrossFade("Idle", 0f);
-        Hub.Character.Stop();
+        AIHub.Character.Model.CrossFade("Idle", 0f);
+        AIHub.Character.Stop();
     }
 
     public override void OnUpdate()
     {
         if (!CanState()) return;
 
-        if (Hub.TargetDistance <= Hub.Character.Stats.AttackRange)
+        if (AIHub.Character.target == null) return;
+
+        if (AIHub.TargetDistance <= AIHub.Character.Stats.AttackRange)
         {
             Hub.NextState<AttackAIState>();
             return;
         }
 
-        if (!Hub.Character.Stats.IsRooted && Hub.TargetDistance <= Hub.config.chaseDistance)
+        if (!AIHub.Character.Stats.IsRooted && AIHub.TargetDistance <= AIHub.config.chaseDistance)
         {
             Hub.NextState<ChaseAIState>();
             return;

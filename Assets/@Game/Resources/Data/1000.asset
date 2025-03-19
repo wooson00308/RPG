@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 1000
   m_EditorClassIdentifier: 
   id: 1000
-  moveSpeed: 0
-  attackRange: 0
-  baseHealth: 0
+  moveSpeed: 500
+  attackRange: 1
+  baseHealth: 150
   healthPerLevel: 0
   baseHealthRegen: 0
   healthRegenPerLevel: 0
@@ -24,9 +24,9 @@ MonoBehaviour:
   baseMagicResist: 0
   magicResistPerLevel: 0
   tenacity: 0
-  baseAttackDamage: 0
+  baseAttackDamage: 20
   attackDamagePerLevel: 0
-  baseAttackSpeed: 0
+  baseAttackSpeed: 1
   attackSpeedPerLevel: 0
   baseAbilityPower: 0
   abilityPowerPerLevel: 0
@@ -42,3 +42,6 @@ MonoBehaviour:
   baseManaRegen: 0
   manaRegenPerLevel: 0
   abilityHaste: 0
+  hitClipName: 13200
+  attackClipId: 13100
+  moveClipName: 13300

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent (typeof(AIStateHub))]
 public class AIState : State
 {
-    protected new AIStateHub Hub => Hub as AIStateHub;
+    protected AIStateHub AIHub => Hub as AIStateHub;
 
     public override void OnEnter()
     {
@@ -12,7 +12,7 @@ public class AIState : State
 
     protected virtual bool CanState()
     {
-        if (!Hub.Character.IsInitialized) return false;
+        if (!AIHub.Character.IsInitialized) return false;
         if (!IsRunning) return false;
         return true;
     }
