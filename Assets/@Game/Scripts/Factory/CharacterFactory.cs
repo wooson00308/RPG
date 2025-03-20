@@ -85,44 +85,4 @@ public class CharacterFactory : MonoBehaviour
         }
         return teamCharacters;
     }
-
-
-    //특정 팀에서 가장 가까운 적 반환
-    public Character FindNearestEnemyOfTeam(Team team)
-    {
-        List<Character> teamCharacters = GetCharactersByTeam(team);
-        if (teamCharacters.Count == 0)
-        {
-            return null; // 해당 팀의 캐릭터가 없으면 null 반환
-        }
-
-        Character nearestEnemy = null;
-        float nearestDistance = float.MaxValue;
-
-        // 같은 팀 캐릭터 중 하나를 기준으로 잡음 (첫 번째 캐릭터)
-        Character referenceCharacter = teamCharacters[0];
-
-        foreach (Character otherCharacter in _characters)
-        {
-            // 같은 팀, 초기화 x 캐릭터는 건너뜁니다.
-            if (otherCharacter.Team == team || !otherCharacter.IsInitialized)
-            {
-                continue;
-            }
-
-            float distance = Vector2.Distance(
-                new Vector2(referenceCharacter.transform.position.x, referenceCharacter.transform.position.z),
-                new Vector2(otherCharacter.transform.position.x, otherCharacter.transform.position.z)
-            );
-
-            if (distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                nearestEnemy = otherCharacter;
-            }
-
-        }
-        return nearestEnemy;
-
-    }
 }

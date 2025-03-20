@@ -199,7 +199,7 @@ public class Character : MonoBehaviour
         if (!_isInitialized) return;
         _agent.speed = _stats.MoveSpeed / 100f;
 
-        target = _factory.FindNearestEnemyOfTeam(_team);
+        target = _factory.FindNearestEnemy(this);
     }
 }
 
