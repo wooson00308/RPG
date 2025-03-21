@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 47123033}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.45, y: -8.91, z: 0}
+  m_LocalPosition: {x: -0.17, y: -5.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -444,11 +444,23 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: sfxSourcePool
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[PooledAudioSource, Assembly-CSharp]],
+        mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   bgmSource: {fileID: 373888421}
-  sfxPoolSize: 50
+  sfxPoolSize: 120
   sfxMixerGroup: {fileID: 0}
-  sfxSourcePool: []
   soundDatabase: {fileID: 11400000, guid: 32cf0bc4bbe90724ca98a626214de7e5, type: 2}
   bgmVolume: 1
   sfxVolume: 0.7
@@ -1669,7 +1681,7 @@ Transform:
   m_GameObject: {fileID: 1919625551}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.68, y: 8.74, z: 0}
+  m_LocalPosition: {x: 0.23, y: 4.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1821,7 +1833,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1954870228}
-  - component: {fileID: 1954870227}
+  - component: {fileID: 1954870230}
+  - component: {fileID: 1954870229}
   m_Layer: 0
   m_Name: Test
   m_TagString: Untagged
@@ -1829,24 +1842,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1954870227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954870226}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a08657b829e5fff44bba18663e756e35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterFactory: {fileID: 113819540}
-  testCharacterData: {fileID: 11400000, guid: 8659780bb6a89aa4bacdcd6ac8c17bb7, type: 2}
-  friendlySpawnPoint: {fileID: 1919625552}
-  enemySpawnPoint: {fileID: 47123034}
-  friendlySpawnAmount: 1
-  enemySpawnAmount: 1
 --- !u!4 &1954870228
 Transform:
   m_ObjectHideFlags: 0
@@ -1862,6 +1857,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1954870229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954870226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7524fe7a04c5f47af3a562101dcb3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterFactory: {fileID: 113819540}
+  friendlySpawnPoint: {fileID: 1919625552}
+  enemySpawnPoint: {fileID: 47123034}
+  testCharacterData: {fileID: 11400000, guid: 872eefccf7747cc49a6ec097bf5a474d, type: 2}
+  friendlySpawnAmount: 0
+  enemySpawnAmount: 100
+--- !u!114 &1954870230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954870226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bf43a47f8fdc04181246c02a7837b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterFactory: {fileID: 113819540}
+  friendlySpawnPoint: {fileID: 1919625552}
+  enemySpawnPoint: {fileID: 47123034}
+  _playerData: {fileID: 11400000, guid: 8659780bb6a89aa4bacdcd6ac8c17bb7, type: 2}
+  _isStartSpawn: 1
 --- !u!1 &2058945284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1944,8 +1974,8 @@ SceneRoots:
   - {fileID: 113819541}
   - {fileID: 1954870228}
   - {fileID: 1424810956}
+  - {fileID: 373888420}
   - {fileID: 1114496805}
   - {fileID: 2058945286}
   - {fileID: 1277954969}
   - {fileID: 1560063974}
-  - {fileID: 373888420}

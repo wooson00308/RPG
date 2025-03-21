@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4ca599f28c475034bb68b1d0666c6220, type: 3}
-  m_Name: 1000
+  m_Name: 1001
   m_EditorClassIdentifier: 
-  id: 1000
-  moveSpeed: 750
-  attackRange: 1.5
-  baseHealth: 12000
+  id: 1001
+  moveSpeed: 500
+  attackRange: 1
+  baseHealth: 150
   healthPerLevel: 0
   baseHealthRegen: 0
   healthRegenPerLevel: 0
-  baseArmor: 100
+  baseArmor: 0
   armorPerLevel: 0
   baseMagicResist: 0
   magicResistPerLevel: 0
   tenacity: 0
-  baseAttackDamage: 80
+  baseAttackDamage: 20
   attackDamagePerLevel: 0
-  baseAttackSpeed: 2
+  baseAttackSpeed: 1
   attackSpeedPerLevel: 0
   baseAbilityPower: 0
   abilityPowerPerLevel: 0

@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _owner: {fileID: 0}
-  _animator: {fileID: 0}
-  _spriteRenderer: {fileID: 0}
+  _animator: {fileID: 2052909397805870841}
+  _spriteRenderer: {fileID: 3166999258420146935}
+  IsPlaying: 0
   _sortingOrderFactor: -10
 --- !u!95 &2052909397805870841
 Animator:

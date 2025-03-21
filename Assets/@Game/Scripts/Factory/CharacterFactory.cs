@@ -52,8 +52,9 @@ public class CharacterFactory : MonoBehaviour
 
             // 2D 거리 계산 (y 좌표는 무시)
             float distance = Vector2.Distance(
-                new Vector2(character.transform.position.x, character.transform.position.z),
-                new Vector2(otherCharacter.transform.position.x, otherCharacter.transform.position.z)
+                 new Vector2(otherCharacter.transform.position.x, otherCharacter.transform.position.y),
+                new Vector2(character.transform.position.x, character.transform.position.y)
+               
             );
 
             if (distance < nearestDistance)

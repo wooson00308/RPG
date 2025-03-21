@@ -69,9 +69,9 @@ MonoBehaviour:
     - Name: volume
       Entry: 4
       Data: 0.2
-    - Name: maxConcurrentPlays
-      Entry: 3
-      Data: 5
+    - Name: cooldown
+      Entry: 4
+      Data: 0.1
     - Name: 
       Entry: 8
       Data: 
@@ -93,9 +93,9 @@ MonoBehaviour:
     - Name: volume
       Entry: 4
       Data: 0.2
-    - Name: maxConcurrentPlays
-      Entry: 3
-      Data: 10
+    - Name: cooldown
+      Entry: 4
+      Data: 0.1
     - Name: 
       Entry: 8
       Data: 
@@ -117,9 +117,9 @@ MonoBehaviour:
     - Name: volume
       Entry: 4
       Data: 1
-    - Name: maxConcurrentPlays
-      Entry: 3
-      Data: 20
+    - Name: cooldown
+      Entry: 4
+      Data: 0.1
     - Name: 
       Entry: 8
       Data: 

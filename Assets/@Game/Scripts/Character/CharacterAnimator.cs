@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class CharacterAnimator : MonoBehaviour
@@ -9,11 +10,11 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField]
     private SpriteRenderer _spriteRenderer; // SpriteRenderer 추가
 
-    private bool _isPlayingState;
+    private bool _isRunningHitEffect;
 
     private string _curState;
     public string State => _curState;
-    public bool IsPlaying => _isPlayingState;
+    public bool IsPlaying;
 
     [Tooltip("Y 좌표에 곱하여 Sorting Order를 결정할 값")]
     [SerializeField] private int _sortingOrderFactor = -10;  // 기본값 -10, 인스펙터에서 조정
@@ -56,7 +57,7 @@ public class CharacterAnimator : MonoBehaviour
         _curState = state;
         _animator.CrossFade(state, fadeTime);
 
-        _isPlayingState = true;
+        IsPlaying = true;
     }
 
     public void OnBasicAttack()
@@ -77,9 +78,16 @@ public class CharacterAnimator : MonoBehaviour
         SoundManager.Instance.PlaySFX(id);
     }
 
-    public void OnStateEnd()
+    public void OnHitEffect()
     {
-        _isPlayingState = false;
+        StartCoroutine(HitEffect());
+    }
+
+    private IEnumerator HitEffect()
+    {
+        _spriteRenderer.color = new Color(1, .5f, .5f);
+        yield return new WaitForSeconds(.1f);
+        _spriteRenderer.color = Color.white;
     }
 
 

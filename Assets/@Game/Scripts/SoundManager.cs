@@ -19,10 +19,11 @@ public class SoundManager : Singleton<SoundManager>
     public int sfxPoolSize = 20;
 
     [TitleGroup("SFX Settings")]
-    public AudioMixerGroup sfxMixerGroup; // Audio Mixer 지원 추가
+    public AudioMixerGroup sfxMixerGroup;
 
+    // PooledAudioSource 리스트 사용
     [ReadOnly]
-    public List<AudioSource> sfxSourcePool = new List<AudioSource>();
+    public List<PooledAudioSource> sfxSourcePool = new List<PooledAudioSource>();
 
     [TitleGroup("Audio Clips"), InlineEditor(InlineEditorObjectFieldModes.Hidden)]
     public SoundDatabase soundDatabase;
@@ -33,15 +34,15 @@ public class SoundManager : Singleton<SoundManager>
         public AudioClip clip;
         [Range(0f, 1f)]
         public float volume = 1f;
-        [LabelText("Max Concurrent Plays")]
-        [Range(1, 20)]
-        public int maxConcurrentPlays = 5; // 클립별 최대 동시 재생 수 (기본값 5)
+        [LabelText("Cooldown (Seconds)")]
+        [Range(0f, 5f)]
+        public float cooldown = 0.1f;
 
         public SFXInfo(AudioClip clip)
         {
             this.clip = clip;
             this.volume = 1f;
-            this.maxConcurrentPlays = 5;
+            this.cooldown = 0.1f;
         }
 
         public SFXInfo() { }
@@ -55,7 +56,8 @@ public class SoundManager : Singleton<SoundManager>
     [LabelText("Master SFX Volume")]
     public float sfxVolume = 1f;
 
-    private Dictionary<string, int> activeSFXCounts = new Dictionary<string, int>(); // 현재 재생 중인 SFX 수 추적
+    private Dictionary<string, float> lastPlayedTimes = new Dictionary<string, float>();
+
 
     [TitleGroup("Volume Control"), ProgressBar(0, 1, r: 0.2f, g: 0.7f, b: 1f)]
     [LabelText("Set BGM Volume")]
@@ -70,9 +72,10 @@ public class SoundManager : Singleton<SoundManager>
     public void SetMasterSFXVolume(float volume)
     {
         sfxVolume = volume;
-        foreach (AudioSource source in sfxSourcePool)
+        // PooledAudioSource 안의 Source에 접근
+        foreach (PooledAudioSource pooledSource in sfxSourcePool)
         {
-            source.volume = sfxVolume;
+            pooledSource.Source.volume = sfxVolume;
         }
     }
 
@@ -140,49 +143,43 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    private AudioSource CreateAndAddSFXSource()
+    private void CreateAndAddSFXSource()
     {
         GameObject sfxObject = new GameObject("SFXSource");
         sfxObject.transform.SetParent(transform);
         AudioSource newSource = sfxObject.AddComponent<AudioSource>();
-        newSource.outputAudioMixerGroup = sfxMixerGroup; // Audio Mixer 연결
-        sfxSourcePool.Add(newSource);
+        newSource.outputAudioMixerGroup = sfxMixerGroup;
         newSource.volume = sfxVolume;
         newSource.playOnAwake = false;
         newSource.priority = 128;
-        return newSource;
+        // PooledAudioSource로 래핑
+        sfxSourcePool.Add(new PooledAudioSource(newSource));
     }
 
-    private AudioSource GetSFXSourceFromPool()
+
+    private PooledAudioSource GetSFXSourceFromPool()
     {
-        foreach (AudioSource source in sfxSourcePool)
+        foreach (PooledAudioSource pooledSource in sfxSourcePool)
         {
-            if (!source.isPlaying)
+            if (pooledSource.IsAvailable)
             {
-                return source;
+                return pooledSource;
             }
         }
-        AudioSource newSource = CreateAndAddSFXSource();
-        return newSource;
+
+        // 사용 가능한 PooledAudioSource가 없으면 새로 생성
+        CreateAndAddSFXSource(); // 리스트에 자동 추가
+        return sfxSourcePool[sfxSourcePool.Count - 1];
+
     }
 
-    private void ReturnSFXSourceToPool(AudioSource source, string sfxName)
+
+    private void ReturnSFXSourceToPool(PooledAudioSource pooledSource)
     {
-        source.Stop();
-        source.clip = null;
-        source.pitch = 1f;
-        source.volume = sfxVolume;
-
-        // 재생 수 감소
-        if (activeSFXCounts.ContainsKey(sfxName))
-        {
-            activeSFXCounts[sfxName]--;
-            if (activeSFXCounts[sfxName] <= 0)
-                activeSFXCounts.Remove(sfxName);
-        }
+        pooledSource.StopAndReset();
+        pooledSource.Source.volume = sfxVolume;
     }
 
-    [TitleGroup("Play Function"), Button(ButtonSizes.Large)]
     public void PlayBGM(string bgmName)
     {
         if (soundDatabase.bgmClips.ContainsKey(bgmName))
@@ -199,8 +196,7 @@ public class SoundManager : Singleton<SoundManager>
         }
     }
 
-    [TitleGroup("Play Function"), Button(ButtonSizes.Large)]
-    public void PlaySFX(string sfxName, float? customVolume = null, int priority = 128)
+    public void PlaySFX(string sfxName, float? customVolume = null)
     {
         if (!soundDatabase.sfxClips.ContainsKey(sfxName))
         {
@@ -209,57 +205,50 @@ public class SoundManager : Singleton<SoundManager>
         }
 
         SFXInfo sfxInfo = soundDatabase.sfxClips[sfxName];
-        int currentCount = activeSFXCounts.ContainsKey(sfxName) ? activeSFXCounts[sfxName] : 0;
 
-        if (currentCount >= sfxInfo.maxConcurrentPlays)
+        // 쿨다운 검사
+        if (lastPlayedTimes.ContainsKey(sfxName))
+        {
+            if (Time.time < lastPlayedTimes[sfxName] + sfxInfo.cooldown)
+            {
+                return;
+            }
+        }
+
+
+        // 재생할 PooledAudioSource 결정
+        PooledAudioSource pooledAudioSourceToUse = null;
+
+        // 1. 사용 가능한 PooledAudioSource 사용
+        foreach (PooledAudioSource pooledSource in sfxSourcePool)
+        {
+            if (pooledSource.IsAvailable)
+            {
+                pooledAudioSourceToUse = pooledSource;
+                break;
+            }
+        }
+
+        // 2. 사용 가능한 소스도 없으면 그냥 리턴.
+        if (pooledAudioSourceToUse == null)
         {
             return;
         }
 
-        AudioSource source = GetSFXSourceFromPool();
-        source.clip = sfxInfo.clip;
-        source.volume = customVolume ?? sfxInfo.volume * sfxVolume;
-        source.priority = priority;
-        source.Play();
+        // SFX 재생
+        pooledAudioSourceToUse.Play(sfxInfo.clip, customVolume ?? sfxInfo.volume * sfxVolume, 128);
 
-        // 재생 수 증가
-        activeSFXCounts[sfxName] = currentCount + 1;
+        // 마지막 재생 시간 업데이트
+        lastPlayedTimes[sfxName] = Time.time;
 
-        StartCoroutine(ReturnToPoolAfterPlaying(source, sfxName));
+        StartCoroutine(ReturnToPoolAfterPlaying(pooledAudioSourceToUse));
     }
 
-    private IEnumerator ReturnToPoolAfterPlaying(AudioSource source, string sfxName)
-    {
-        yield return new WaitForSeconds(source.clip.length);
-        ReturnSFXSourceToPool(source, sfxName);
-    }
 
-    [TitleGroup("Fade Control"), Button(ButtonSizes.Medium)]
-    [LabelText("Fade In BGM")]
-    public void FadeInBGM(string bgmName, float fadeDuration)
+    private IEnumerator ReturnToPoolAfterPlaying(PooledAudioSource pooledSource)
     {
-        StartCoroutine(FadeIn(bgmName, fadeDuration));
-    }
-
-    private IEnumerator FadeIn(string bgmName, float fadeDuration)
-    {
-        if (!soundDatabase.bgmClips.ContainsKey(bgmName))
-        {
-            Debug.LogError("BGM not found: " + bgmName);
-            yield break;
-        }
-
-        PlayBGM(bgmName);
-        float currentTime = 0;
-        float start = 0f;
-        float targetVolume = bgmVolume;
-        while (currentTime < fadeDuration)
-        {
-            currentTime += Time.deltaTime;
-            bgmSource.volume = Mathf.Lerp(start, targetVolume, currentTime / fadeDuration);
-            yield return null;
-        }
-        bgmSource.volume = targetVolume;
+        yield return new WaitForSeconds(pooledSource?.Source.clip != null ? pooledSource.Source.clip.length + 0.1f : 0.1f);
+        ReturnSFXSourceToPool(pooledSource); //인자가 PooledAudioSource
     }
 
 #if UNITY_EDITOR
@@ -281,3 +270,33 @@ public class SoundManager : Singleton<SoundManager>
     }
 #endif
 }
+// 별도 파일 (PooledAudioSource.cs)
+public class PooledAudioSource
+{
+    public AudioSource Source { get; private set; }
+    public bool IsAvailable { get; set; }
+
+    public PooledAudioSource(AudioSource source)
+    {
+        Source = source;
+        IsAvailable = true;
+    }
+
+    public void Play(AudioClip clip, float volume, int priority)
+    {
+        Source.clip = clip;
+        Source.volume = volume;
+        Source.priority = priority; // 여기서 priority 설정
+        Source.Play();
+        IsAvailable = false;
+    }
+
+    public void StopAndReset()
+    {
+        Source.Stop();
+        Source.clip = null;
+        Source.pitch = 1f;
+        IsAvailable = true;
+    }
+}
+
