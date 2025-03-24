@@ -1872,7 +1872,7 @@ MonoBehaviour:
   characterFactory: {fileID: 113819540}
   friendlySpawnPoint: {fileID: 1919625552}
   enemySpawnPoint: {fileID: 47123034}
-  testCharacterData: {fileID: 11400000, guid: 872eefccf7747cc49a6ec097bf5a474d, type: 2}
+  testCharacterData: {fileID: 11400000, guid: 1445ab82e248cc244b5c38db8790317e, type: 2}
   friendlySpawnAmount: 0
   enemySpawnAmount: 100
 --- !u!114 &1954870230

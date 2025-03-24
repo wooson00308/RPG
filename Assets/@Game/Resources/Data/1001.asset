@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1001
   moveSpeed: 500
-  attackRange: 1
+  attackRange: 0.8
   baseHealth: 150
   healthPerLevel: 0
   baseHealthRegen: 0
