@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: 2000
   m_EditorClassIdentifier: 
   id: 2000
-  moveSpeed: 500
+  moveSpeed: 400
   attackRange: 0.8
-  baseHealth: 150
+  baseHealth: 500
   healthPerLevel: 0
   baseHealthRegen: 0
   healthRegenPerLevel: 0
-  baseArmor: 0
+  baseArmor: 18
   armorPerLevel: 0
   baseMagicResist: 0
   magicResistPerLevel: 0
   tenacity: 0
-  baseAttackDamage: 20
+  baseAttackDamage: 25
   attackDamagePerLevel: 0
   baseAttackSpeed: 1
   attackSpeedPerLevel: 0

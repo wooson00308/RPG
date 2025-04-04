@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 1001
   m_EditorClassIdentifier: 
   id: 1001
-  moveSpeed: 500
+  moveSpeed: 400
   attackRange: 0.8
-  baseHealth: 150
+  baseHealth: 450
   healthPerLevel: 0
   baseHealthRegen: 0
   healthRegenPerLevel: 0
-  baseArmor: 0
+  baseArmor: 15
   armorPerLevel: 0
   baseMagicResist: 0
   magicResistPerLevel: 0
