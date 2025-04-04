@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79902e1c393b1fe4da55f679eee14fef, type: 3}
   m_Name: AIConfig
   m_EditorClassIdentifier: 
-  chaseDistance: 9999
-  attackDistance: 0
+  chaseDistance: 999
+  attackDistance: 1.5
