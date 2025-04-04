@@ -9,29 +9,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ca599f28c475034bb68b1d0666c6220, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f9858089f3948442a5538019efd9e38, type: 3}
   m_Name: 2003
   m_EditorClassIdentifier: 
   id: 2003
   moveSpeed: 400
-  attackRange: 0.8
-  baseHealth: 650
+  attackRange: 1.5
+  baseHealth: 300
   healthPerLevel: 0
   baseHealthRegen: 0
   healthRegenPerLevel: 0
-  baseArmor: 25
+  baseArmor: 15
   armorPerLevel: 0
-  baseMagicResist: 0
+  baseMagicResist: 15
   magicResistPerLevel: 0
   tenacity: 0
-  baseAttackDamage: 40
+  baseAttackDamage: 35
   attackDamagePerLevel: 0
   baseAttackSpeed: 1
   attackSpeedPerLevel: 0
   baseAbilityPower: 0
   abilityPowerPerLevel: 0
   critChance: 0
-  critDamage: 1.75
+  critDamage: 0
   armorPenetration: 0
   magicPenetration: 0
   lifeSteal: 0
